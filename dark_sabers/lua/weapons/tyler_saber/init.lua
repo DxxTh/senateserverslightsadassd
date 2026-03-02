@@ -69,6 +69,8 @@ end
 
 function SWEP:Think()
 	local ply = self.Owner
+	if not IsValid(ply) then return end
+
 	self.targets = self.targets or {}
 	
 	local formID = "Form I: Shii-Cho"
@@ -86,8 +88,31 @@ function SWEP:Think()
 		--ply:SetNW2String("form", self.formID)
 	end
 	
-	local form = lts.forms[self.formID]
+	local form = DarkSabers and DarkSabers.ResolveForm and DarkSabers.ResolveForm(self.formID) or {
+		moves = {
+			w = {},
+			a = {},
+			d = {}
+		},
+		idles = {
+			up = "wos_judge_b_idle",
+			left = "wos_judge_r_idle",
+			right = "wos_judge_h_idle"
+		},
+		runs = {
+			up = "wos_judge_b_run",
+			left = "wos_judge_r_run",
+			right = "run_melee2"
+		}
+	}
 	
+
+	if not istable(form.moves) or not istable(form.moves.w) or not istable(form.moves.a) or not istable(form.moves.d) then
+		if DarkSabers and DarkSabers.WarnOnce then
+			DarkSabers.WarnOnce("invalid_form_moves_" .. tostring(self.formID), "Form '%s' has invalid move data. Saber logic is paused until forms are loaded.", tostring(self.formID))
+		end
+		return
+	end
 	self.hummer = self.hummer or 0
 	self.comboTimer = self.comboTimer or 0
 	self.comboID = self.comboID or 1

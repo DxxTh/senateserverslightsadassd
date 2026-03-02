@@ -274,9 +274,8 @@ function overrideAnimation()
 			--``print(plyTable.CalcIdeal)
 		end
 		
-		local set = {}
-		
-		set.judge = {
+		local formID = ply:GetNW2String("form", "Untrained")
+		local form = DarkSabers and DarkSabers.ResolveForm and DarkSabers.ResolveForm(formID) or {
 			idles = {
 				up = "wos_judge_b_idle",
 				left = "wos_judge_r_idle",
@@ -288,38 +287,6 @@ function overrideAnimation()
 				right = "run_melee2"
 			}
 		}
-		
-		set.phalanx = {
-			idles = {
-				up = "wos_phalanx_b_idle",
-				left = "wos_phalanx_r_idle",
-				right = "wos_phalanx_h_idle"
-			},
-			runs = {
-				up = "wos_phalanx_b_run",
-				left = "wos_phalanx_r_run",
-				right = "wos_phalanx_h_run"
-			}
-		}
-		
-		
-		set.ryoku = {
-			idles = {
-				up = "wos_ryoku_b_idle",
-				left = "wos_ryoku_r_idle",
-				right = "wos_ryoku_h_idle"
-			},
-			runs = {
-				up = "wos_ryoku_b_run",
-				left = "wos_ryoku_r_run",
-				right = "wos_ryoku_h_run"
-			}
-		}
-		
-		local animSet = "judge"
-		
-		local formID = ply:GetNW2String("form", "Untrained")
-		local form = lts.forms[formID]
 		
 		if ply.animTime < CurTime() then
 			for p,j in pairs(ACT_TRANS) do
@@ -437,4 +404,3 @@ end)
 hook.Add( "PostGamemodeLoaded", "fdgher6u465u46u", function() overrideAnimation() end) 										 -- NUTSCRIPT OVERRIDES.
 local loadTime = 0																											 -- NUTSCRIPT OVERRIDES.
 hook.Add("Think", "4290jk", function() if loadTime <= CurTime() then overrideAnimation() loadTime = CurTime() + 5 end end)  -- NUTSCRIPT OVERRIDES.
-
